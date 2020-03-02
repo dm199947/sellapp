@@ -8,7 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     //交互数据
     state: {
-        goodslist: [] //所有商品数组
+        goodslist: [], //所有商品数组
+        merchant: []
     },
     //改变，它是改变state的唯一方式
     mutations: {
@@ -24,6 +25,10 @@ export default new Vuex.Store({
                     }
                 }
             }
+        },
+
+        initMerchant(state, newArr) {
+            state.merchant = newArr
         }
     },
 
