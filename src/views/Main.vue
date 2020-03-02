@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bigmain">
     <div class="head">
       <!-- 容器页面 -->
       <div :style="{backgroundImage:'url('+data.avatar+')'}" class="headbg"></div>
@@ -42,8 +42,10 @@
     </div>
     <!-- 二级路由出口 -->
     <router-view></router-view>
-
-    <div class="shopcar-bar">
+    <transition name="slide-fade">
+      <div v-show="shopcarShow" class="shopcar-board">购物车板子</div>
+    </transition>
+    <div @click="shopcarShow = !shopcarShow" class="shopcar-bar">
       <div class="shopcar-box1">
         <img src="../assets/imgs/car.png" />
         <span class="price">￥0</span>
@@ -60,6 +62,7 @@ import { getSeller } from "../api/apis";
 export default {
   data() {
     return {
+      shopcarShow: false, //是否显示购物车板子
       data: {} //商家信息
     };
   },
@@ -77,186 +80,212 @@ export default {
 </script>
 
 <style lang='less' scoped>
-/* 头部 */
-.head {
-  width: 100%;
-  height: 180px;
-  /* 背景图 */
-  .headbg {
+.bigmain {
+  // display: flex;
+  /* 头部 */
+  .head {
     width: 100%;
     height: 180px;
-    position: relative;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    -webkit-filter: blur(15px);
-    -moz-filter: blur(15px);
-    -o-filter: blur(15px);
-    -ms-filter: blur(15px);
-    filter: blur(10px);
-  }
-  /* 头部内容 */
-  .headmain {
-    width: 100%;
-    height: 180px;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    /* 商家头像 */
-    .headleft {
-      text-align: center;
-      img {
-        width: 80px;
-        height: 80px;
-        margin-top: 30px;
+    /* 背景图 */
+    .headbg {
+      width: 100%;
+      height: 180px;
+      position: relative;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      -webkit-filter: blur(15px);
+      -moz-filter: blur(15px);
+      -o-filter: blur(15px);
+      -ms-filter: blur(15px);
+      filter: blur(10px);
+    }
+    /* 头部内容 */
+    .headmain {
+      width: 100%;
+      height: 180px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      /* 商家头像 */
+      .headleft {
+        text-align: center;
+        img {
+          width: 80px;
+          height: 80px;
+          margin-top: 30px;
+        }
+      }
+      /* 商家描述 */
+      .headcenter {
+        p:first-child {
+          font-size: 20px;
+          font-weight: bolder;
+          margin-top: 30px;
+          color: #fff;
+          img {
+            width: 35px;
+            height: 20px;
+          }
+        }
+        p:nth-child(2) {
+          font-size: 18px;
+          color: #fff;
+          span {
+            font-size: 18px;
+          }
+        }
+        p:last-child {
+          font-size: 16px;
+          color: #fff;
+          margin-top: 4px;
+          img {
+            width: 16px;
+          }
+        }
+      }
+
+      /* 店铺图片 */
+      .headright {
+        .btn {
+          width: 40px;
+          height: 26px;
+          text-align: center;
+          border-radius: 40px;
+          line-height: 26px;
+          font-size: 12px;
+          background-color: #3e352b;
+          color: #fff;
+          position: absolute;
+          top: 94px;
+          left: -40px;
+          cursor: pointer;
+        }
       }
     }
-    /* 商家描述 */
-    .headcenter {
-      p:first-child {
-        font-size: 20px;
-        font-weight: bolder;
-        margin-top: 30px;
-        color: #fff;
-        img {
-          width: 35px;
-          height: 20px;
-        }
+    /* 公告 */
+    .ad {
+      width: 100%;
+      height: 30px;
+      padding: 0px 10px;
+      color: white;
+      text-align: center;
+      line-height: 30px;
+      font-size: 12px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      background: rgba(5, 4, 4, 0.5);
+      position: absolute;
+      bottom: 4px;
+      right: 10px;
+      .ad_box {
+        display: inline-block;
+        width: 26px;
+        height: 14px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 14px;
+        font-size: 11px;
+        background: white;
+        color: black;
       }
-      p:nth-child(2) {
-        font-size: 18px;
-        color: #fff;
-        span {
-          font-size: 18px;
-        }
-      }
-      p:last-child {
-        font-size: 16px;
-        color: #fff;
-        margin-top: 4px;
-        img {
-          width: 16px;
-        }
-      }
+    }
+  }
+
+  /* 一级路由 */
+  .router-link-div {
+    display: flex;
+    justify-content: space-around;
+    line-height: 50px;
+
+    a {
+      font-size: 18px;
+      color: #000d00;
     }
 
-    /* 店铺图片 */
-    .headright {
-      .btn {
-        width: 40px;
-        height: 26px;
-        text-align: center;
-        border-radius: 40px;
-        line-height: 26px;
-        font-size: 12px;
-        background-color: #3e352b;
-        color: #fff;
-        position: absolute;
-        top: 94px;
-        left: -40px;
-        cursor: pointer;
-      }
+    .router-link-exact-active {
+      color: #f60;
     }
   }
-  /* 公告 */
-  .ad {
+
+  .shopcar-bar {
+    position: fixed;
     width: 100%;
-    height: 30px;
-    padding: 0px 10px;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    font-size: 12px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    background: rgba(5, 4, 4, 0.5);
-    position: absolute;
-    bottom: 4px;
-    right: 10px;
-    .ad_box {
-      display: inline-block;
-      width: 26px;
-      height: 14px;
+    height: 60px;
+    bottom: 0;
+    background: #141c27;
+    display: flex;
+    justify-content: space-between;
+    .shopcar-box1 {
+      width: 70%;
+      height: 30px;
+      padding: 15px 0px;
       font-weight: bold;
       text-align: center;
-      line-height: 14px;
-      font-size: 11px;
-      background: white;
-      color: black;
+      line-height: 30px;
+      position: relative;
+      img {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        left: 20px;
+        top: -16px;
+        border: 5px solid #141c27;
+        border-radius: 50%;
+      }
+      .price {
+        display: inline-block;
+        width: 50px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 18px;
+        border-right: 1px solid gray;
+        margin-left: 50px;
+      }
+      .song {
+        display: inline-block;
+        width: 100px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        font-size: 13px;
+        margin-left: 10px;
+      }
     }
-  }
-}
-
-/* 一级路由 */
-.router-link-div {
-  display: flex;
-  justify-content: space-around;
-  line-height: 50px;
-
-  a {
-    font-size: 18px;
-    color: #000d00;
-  }
-
-  .router-link-exact-active {
-    color: #f60;
-  }
-}
-
-.shopcar-bar {
-  position: fixed;
-  width: 100%;
-  height: 60px;
-  bottom: 0;
-  background: #141c27;
-  display: flex;
-  justify-content: space-between;
-  .shopcar-box1 {
-    width: 70%;
-    height: 30px;
-    padding: 15px 0px;
-    font-weight: bold;
-    text-align: center;
-    line-height: 30px;
-    position: relative;
-    img {
-      width: 60px;
+    .shopcar-box2 {
+      width: 30%;
       height: 60px;
-      position: absolute;
-      left: 20px;
-      top: -16px;
-      border: 5px solid #141c27;
-      border-radius: 50%;
-    }
-    .price {
-      display: inline-block;
-      width: 50px;
-      height: 30px;
-      line-height: 30px;
-      font-size: 18px;
-      border-right: 1px solid gray;
-      margin-left: 50px;
-    }
-    .song {
-      display: inline-block;
-      width: 100px;
-      height: 30px;
+      font-size: 20px;
+      font-weight: bold;
       text-align: center;
-      line-height: 30px;
-      font-size: 13px;
-      margin-left: 10px;
+      line-height: 60px;
+      color: rgb(146, 146, 146);
+      background: rgb(58, 57, 57);
     }
   }
-  .shopcar-box2 {
-    width: 30%;
-    height: 60px;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    line-height: 60px;
-    color: rgb(146, 146, 146);
-    background: rgb(58, 57, 57);
+
+  /* 购物车板子 */
+  .shopcar-board {
+    position: fixed;
+    height: 100px;
+    width: 100%;
+    bottom: 60px;
+    background-color: skyblue;
+  }
+
+  /* 可以设置不同的进入和离开动画 */
+  /* 设置持续时间和动画函数 */
+  .slide-fade-enter-active {
+    transition: all 0.8s ease;
+  }
+  .slide-fade-leave-active {
+    transition: all 0.8s ease;
+  }
+  .slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+    transform: translateY(100px);
+    opacity: 0;
   }
 }
 </style>
